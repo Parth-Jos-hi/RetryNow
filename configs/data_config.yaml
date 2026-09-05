@@ -1,0 +1,120 @@
+# Synthetic data generation parameters — used by the generator CLI
+
+generator:
+  n_merchants: 120
+  n_customers: 4000
+  n_transactions: 20000
+  latent_noise: 0.12        # per-(txn,action) noise on the oracle probabilities
+
+  merchants:
+    verticals:
+      food_delivery: 0.28
+      ecommerce: 0.22
+      education_fees: 0.16
+      utility_bills: 0.14
+      travel: 0.10
+      subscription_saas: 0.10
+
+  payment_methods:
+    upi: 0.52
+    debit_card: 0.22
+    credit_card: 0.16
+    netbanking: 0.10
+
+  failure_reasons:
+    insufficient_funds: 0.22
+    bank_server_timeout: 0.18
+    issuer_decline: 0.16
+    upi_server_busy: 0.14
+    network_timeout: 0.10
+    otp_expired: 0.08
+    card_expired: 0.05
+    account_blocked: 0.04
+    duplicate_payment_block: 0.03
+
+  # How addressable each failure reason tends to be (seeds the per-action
+  # latent probabilities — the engine's *potential* lift)
+  recovery_seed_probs:
+    insufficient_funds: 0.55
+    bank_server_timeout: 0.75
+    issuer_decline: 0.30
+    upi_server_busy: 0.80
+    network_timeout: 0.70
+    otp_expired: 0.60
+    card_expired: 0.10
+    account_blocked: 0.05
+    duplicate_payment_block: 0.20
+
+  # Per-action recoverability shifts by reason. The model must LEARN these
+  # patterns — nothing here is copied into the decision engine.
+  action_shifts:
+    retry_soon:
+      upi_server_busy: 1.00
+      bank_server_timeout: 1.00
+      network_timeout: 1.00
+      otp_expired: 0.70
+      issuer_decline: 0.75
+      duplicate_payment_block: 0.50
+      insufficient_funds: 0.45
+      card_expired: 0.05
+      account_blocked: 0.03
+    retry_later:
+      upi_server_busy: 0.50
+      bank_server_timeout: 0.65
+      network_timeout: 0.40
+      otp_expired: 0.75
+      issuer_decline: 0.70
+      duplicate_payment_block: 0.90
+      insufficient_funds: 1.15
+      card_expired: 0.04
+      account_blocked: 0.03
+    switch_method:
+      upi_server_busy: 0.80
+      bank_server_timeout: 0.90
+      network_timeout: 0.60
+      otp_expired: 0.30
+      issuer_decline: 0.65
+      duplicate_payment_block: 0.30
+      insufficient_funds: 0.35
+      card_expired: 0.55
+      account_blocked: 0.20
+    send_link:
+      upi_server_busy: 0.50
+      bank_server_timeout: 0.45
+      network_timeout: 0.45
+      otp_expired: 0.55
+      issuer_decline: 0.40
+      duplicate_payment_block: 0.40
+      insufficient_funds: 0.70
+      card_expired: 0.30
+      account_blocked: 0.10
+
+  # Historical policy (retry) exposure by reason — the *selection bias* a naive
+  # model would learn from. Never a model feature; used for propensity-aware eval.
+  retry_propensity:
+    upi_server_busy: 0.85
+    bank_server_timeout: 0.80
+    network_timeout: 0.75
+    otp_expired: 0.60
+    insufficient_funds: 0.50
+    issuer_decline: 0.45
+    duplicate_payment_block: 0.30
+    card_expired: 0.05
+    account_blocked: 0.03
+
+  # Synthetic risk score feeding the mock risk gate. NOT a fraud model — the
+  # risk gate is an interface prepared for a production risk system.
+  # A small "fraud-flagged" segment (high_risk_share, drawn from a dedicated
+  # RNG so the main simulation stream is untouched) carries the strong lift —
+  # that is the segment whose recoveries the gate must demonstrably block.
+  # High-risk issuing banks add only a mild secondary lift. Risk is *not*
+  # dominated by amount: compliance blocks spread across the value
+  # distribution, not just the biggest tickets.
+  risk:
+    base: 0.15
+    high_risk_share: 0.03       # share of transactions in the flagged segment
+    high_risk_lift: 0.60        # lift for segment members (crosses 0.85+)
+    bank_risk_lift: 0.15        # mild extra lift for high_risk_banks
+    high_risk_banks: ["bank_d", "bank_j"]
+    amount_lift: 0.10
+    noise: 0.06

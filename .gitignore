@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+.eggs/
+
+# Virtual env
+.venv/
+venv/
+env/
+
+# Model artifacts (binary and heavy) — regenerate via training
+models/*.joblib
+models/*.json
+models/*.pkl
+models/metadata/*
+!models/.gitkeep
+!models/metrics/.gitkeep
+
+# Data — generated locally (single command regenerates everything)
+data/raw/*
+data/processed/*
+data/synthetic/*.csv
+data/synthetic/*.parquet
+!data/synthetic/.gitkeep
+!data/synthetic/*.md
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+
+# Env & secrets
+.env
+.env.local
+
+# OS noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Reports are generated
+reports/*.json
+reports/*.csv
+!reports/.gitkeep
+
+# Logs
+*.log
+logs/

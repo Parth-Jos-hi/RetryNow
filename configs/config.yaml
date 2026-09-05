@@ -1,0 +1,93 @@
+# RetryNow configuration — AI Revenue Recovery Engine
+
+app:
+  name: "RetryNow"
+  version: "1.0.0"
+  random_seed: 42
+
+paths:
+  raw_data_dir: "data/raw"
+  synthetic_data_dir: "data/synthetic"
+  processed_data_dir: "data/processed"
+  model_dir: "models"
+  report_dir: "reports"
+
+data:
+  n_transactions: 20000          # total synthetic transactions (success + fail)
+  failure_share: 0.20            # share of transactions that fail initially
+  start_date: "2025-01-01"
+  end_date: "2025-06-30"         # ~6 months of data
+  synthetic_file: "data/synthetic/failed_payments.csv"
+  drift:                        # distribution shift (bank_c timeouts improve)
+    drift_date: "2025-05-01"
+    bank_timeout_recovery_lift: 1.2
+
+features:
+  numerical:
+    - amount
+    - amount_log
+    - customers_previous_success_rate
+    - merchant_previous_success_rate
+    - hour_of_day
+    - day_of_week
+    - days_since_failure_seen_for_instrument
+  categorical:
+    - payment_method
+    - failure_reason_code
+    - merchant_vertical
+    - bank
+    - is_weekend
+
+model:
+  type: xgboost                 # or: histogram_gb, random_forest (auto fallback)
+  n_trials: 30                  # optuna-style random-search trials (manual loop)
+  test_size: 0.20
+  probability_calibration: true
+  retrain: true                 # force retrain even if artifacts exist
+  save: true
+  # Multi-action estimator: retry_soon is the ML model; retry_later, switch and
+  # link use calibrated per-reason tables (see src/models/recoverability.py)
+  train_on_exposed: true        # ML label = observed outcomes only (censored-safe)
+
+decision_engine:
+  retry_soon_hours: 2           # "server busy / bank timeout" → retry in ~2h
+  retry_later_hours: 72         # "insufficient balance" → retry after ~3 days
+  # Expected-value terms (₹-equivalent, fixed constants so utility stays
+  # value-driven rather than distortionary)
+  retry_cost_per_attempt: 2.0   # network/bank call cost per executed retry
+  friction_cost_per_touch_silent: 15.0   # silent push/retry touch
+  friction_cost_per_touch_visible: 25.0  # visible touch (switch offer / link)
+  min_p_floor: 0.03             # below this P for every action → give_up
+  max_attempts_per_payment: 3   # stopping rule: a payment is retried at most N times
+  max_retries_per_customer_day: 5  # stopping rule: politeness cap per customer-day
+
+recoverability:
+  table_prior_alpha: 5.0        # empirical-Bayes smoothing on per-reason tables
+  salary_boost_later: 1.30      # insufficient_funds, 1st–5th → retry_later boost
+  switch_no_alt_multiplier: 0.05  # no alt instrument on file → switch is dead
+
+risk_gate:
+  enabled: true
+  block_threshold: 0.8          # risk_score above this → ALLOW_NONE (blocked)
+  per_action_thresholds:        # fraud engines are consulted per action
+    retry_soon: 0.95            # silent retries may pass even at higher risk
+    retry_later: 0.9
+    switch_method: 0.85
+    send_link: 0.85             # a visible link to a flagged customer is riskiest
+  # NOTE: risk detection is OUT OF SCOPE — this is a mock interface, prepared
+  # for integration with a production risk system.
+
+simulation:
+  baseline_retry_hours: 4       # "dumb retry": every eligible failure once after 4h
+  retry_bandwidth_per_minute: 300
+  outcome_states: [SUCCESS, FAILED, EXPIRED, USER_DECLINED, TIMED_OUT]
+  idempotent: true              # re-executing a job returns its stored outcome
+
+explainer:
+  provider: auto                # auto | openai | groq | template
+  model: "gpt-4o-mini"
+  temperature: 0.4
+  max_tokens: 220
+
+dashboard:
+  port: 8501

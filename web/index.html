@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RetryNow — AI Revenue Recovery Agent</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+
+<!-- ─────────────────────────── top bar ─────────────────────────── -->
+<header class="topbar">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 40 40" width="26" height="26" aria-hidden="true">
+      <defs>
+        <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#4da3ff"/><stop offset="1" stop-color="#1e5eff"/>
+        </linearGradient>
+      </defs>
+      <rect x="3" y="3" width="34" height="34" rx="9" fill="url(#lg)"/>
+      <path d="M23.4 5.5 12.2 21h5.6L15.4 34.5 27.8 19h-6l1.6-13.5z" fill="#ffffff"/>
+      <circle cx="27.5" cy="29.5" r="4.2" fill="#1e5eff" stroke="#ffffff" stroke-width="1.6"/>
+      <path d="M26.5 30.6l1.4 1.4 2.9-3.2" fill="none" stroke="#ffffff" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span class="brand-name">RetryNow</span>
+    <span class="brand-sub">AI Revenue Recovery Agent · Track 3</span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <span id="run-badge" class="run-badge" title="Pipeline run the data came from"></span>
+</header>
+
+<main>
+
+  <!-- ─────────────────────────── hero ─────────────────────────── -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Razorpay AI Internship — Track 3: AI Revenue Recovery</p>
+        <h1>Failed payments aren't lost money.<br>
+          <span class="accent">They're recoverable revenue — if you chase them at the <em>right time, right way</em>.</span>
+        </h1>
+        <p class="lede">
+          When a payment fails, most merchants either spam a retry (annoying the customer) or
+          quietly lose the order. RetryNow picks <strong>exactly one</strong> smart action per failed
+          payment — retry soon, retry after payday, switch instrument, send a link, or honestly
+          give up — recovers the ₹, and stops when it's not worth it.
+        </p>
+        <div class="hero-stats" id="hero-stats">
+          <div class="stat-card"><div class="stat-num" id="stat-recovered">—</div><div class="stat-label">AI recovered value</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-delta">—</div><div class="stat-label">Net vs dumb retry</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-rate">—</div><div class="stat-label">Recovery rate (value)</div></div>
+          <div class="stat-card"><div class="stat-num" id="stat-touches">—</div><div class="stat-label">Customer touchpoints</div></div>
+        </div>
+      </div>
+      <div class="hero-takeaways" id="hero-takeaways"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ VIEW 1 · LIVE DEMO ═══════════════════ -->
+  <section id="view-demo" class="section view">
+    <h2>See it work <span class="muted">— the payer pays, the merchant hears the outcome</span></h2>
+    <p class="section-note">
+      Pick a real failure scenario, press <strong>Pay</strong>. On the left you're the payer —
+      the payment fails. On the right, the merchant instantly gets an <em>assurance</em>:
+      will it still recover, when, how confident — so their trust isn't broken and the order
+      isn't cancelled. Powered by the actual trained model.
+    </p>
+
+    <div class="theater">
+      <!-- PAYER PANE -->
+      <div class="pane payer">
+        <div class="pane-title">Payer</div>
+        <h3>Pay for an order</h3>
+        <div class="scenario-list" id="scenario-list"></div>
+        <div class="amount-row">
+          <label for="demo-amount">Order amount</label>
+          <input id="demo-amount" type="number" min="1" step="1" value="1200">
+          <span class="muted" style="font-size:12px">₹</span>
+        </div>
+        <button class="btn pay-btn" id="pay-btn">Pay now</button>
+
+        <div class="stage" id="payer-stage">
+          <div class="txn-line dim">Pick a scenario and press Pay to watch the flow.</div>
+        </div>
+      </div>
+
+      <!-- MERCHANT PANE -->
+      <div class="pane merchant-pane">
+        <div class="pane-title">Merchant dashboard · live</div>
+        <h3 id="merchant-head">Recovery & assurance</h3>
+        <div class="stage" id="merchant-stage">
+          <div class="txn-line dim">New failed payments will appear here as the payer pays.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <h3>What just happened?</h3>
+      <ul class="honesty-list" id="demo-explainer-note"></ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ VIEW 2 · MERCHANT FEED ═══════════════════ -->
+  <section id="view-merchant" class="section view">
+    <h2>Merchant's dashboard <span class="muted">— the joint benefit, on your own CSV</span></h2>
+    <p class="section-note">
+      Upload failed-payment CSV and see, row by row, the single best recovery action, the
+      merchant-facing assurance, and what both parties stand to win — <strong>merchant recovers
+      the ₹, Razorpay earns its fee on it</strong>. Try it with the sample file first.
+    </p>
+
+    <div class="card">
+      <form id="upload-form">
+        <div class="filters">
+          <label>CSV file
+            <input type="file" id="upload-file" accept=".csv,text/csv" required
+                   aria-label="Choose a failed-transactions CSV">
+          </label>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+            <button type="submit" id="upload-btn" class="btn">Run AI & show the benefit</button>
+            <button type="button" id="sample-btn" class="btn ghost">Try the sample file</button>
+            <a href="samples/merchant_failures.csv" download class="btn ghost">Download sample CSV</a>
+          </div>
+        </div>
+        <p class="table-footer" id="upload-hint">
+          Required: <code>amount</code>, <code>payment_method</code>, <code>failure_reason_code</code>.
+          Optional: <code>customer_instruments</code>, <code>bank</code>, <code>risk_score</code>,
+          <code>timestamp</code>…
+        </p>
+      </form>
+      <div id="upload-progress" class="status" hidden>Scoring your transactions…</div>
+      <div id="upload-results" hidden></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ VIEW 3 · PROOF ═══════════════════ -->
+  <section id="view-proof" class="section view">
+
+    <h2>Policy comparison <span class="muted">— same transactions, seeded run</span></h2>
+    <p class="section-note">
+      Four policies on the same 1,336 test transactions. The AI agent beats dumb retry net of
+      costs while touching far fewer customers, and a risk gate demonstrably suppresses high-risk
+      payments before any attempt.
+    </p>
+    <div class="card"><table class="data-table" id="comparison-table"></table></div>
+    <div class="metric-strip" id="agent-metrics"></div>
+
+    <div class="two-col" style="margin-top:18px">
+      <div class="card">
+        <h3>Chosen actions</h3>
+        <div id="actions-chart" class="bar-chart"></div>
+      </div>
+      <div class="card">
+        <h3>Outcomes by executed action</h3>
+        <table class="data-table" id="outcome-table"></table>
+      </div>
+    </div>
+
+    <h2>Decision audit trail</h2>
+    <p class="section-note">Every transaction: what was considered, what was chosen, the expected
+      value behind it, the risk verdict, and what actually happened.</p>
+    <div class="card">
+      <div class="filters">
+        <label>Reason <select id="f-reason"><option value="">all</option></select></label>
+        <label>Action <select id="f-action"><option value="">all</option></select></label>
+        <label>Search txn / customer <input id="f-q" type="text" placeholder="pay104…"></label>
+        <span class="filters-spacer"></span>
+        <label>Show <select id="f-limit">
+          <option>25</option><option selected>50</option><option>100</option><option>250</option>
+        </select></label>
+      </div>
+      <div class="table-scroll"><table class="data-table" id="trail-table"></table></div>
+      <p class="table-footer" id="trail-count"></p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Why the agent chose this action</h3>
+        <div class="explain-pick">
+          <label>Pick a transaction <select id="e-txn"></select></label>
+        </div>
+        <div id="explain-body"><p class="muted">Select a transaction above.</p></div>
+      </div>
+      <div class="card">
+        <h3>Distribution drift — why the rule wins one segment</h3>
+        <div id="drift-cards"></div>
+        <div style="margin-top:12px">
+          <h3>Monthly breakdown (post-drift)</h3>
+          <table class="data-table" id="drift-monthly"></table>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>The historical record we learned from</h3>
+        <table class="data-table" id="offpolicy-table"></table>
+        <p class="muted small">
+          Observed ≠ truth: the old policy retried favorable reasons more often, so naive rates
+          overstate recoverability. IPW nets that out. <code>censored = unknown</code>, never failure.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Honesty — the parts we don't hand-wave</h3>
+        <ul class="honesty-list" id="method-note"></ul>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-left">
+    <svg class="logo" viewBox="0 0 40 40" width="18" height="18" aria-hidden="true">
+      <defs>
+        <linearGradient id="lgf" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#4da3ff"/><stop offset="1" stop-color="#1e5eff"/>
+        </linearGradient>
+      </defs>
+      <rect x="3" y="3" width="34" height="34" rx="9" fill="url(#lgf)"/>
+      <path d="M23.4 5.5 12.2 21h5.6L15.4 34.5 27.8 19h-6l1.6-13.5z" fill="#ffffff"/>
+      <circle cx="27.5" cy="29.5" r="4.2" fill="#1e5eff" stroke="#ffffff" stroke-width="1.6"/>
+      <path d="M26.5 30.6l1.4 1.4 2.9-3.2" fill="none" stroke="#ffffff" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <strong>RetryNow</strong> — expected-value revenue recovery. Data is synthetic;
+    results reproduce bit-for-bit with <code>--mode all --seed 42</code>.
+  </div>
+  <div class="foot-right">97 tests · audit JSONL · seeded reproducibility</div>
+</footer>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
