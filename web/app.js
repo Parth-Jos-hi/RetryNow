@@ -551,7 +551,7 @@ function showAssurance(decision) {
   }
 
   const mc = el("div", "cx-caption");
-  mc.innerHTML = "<span class='cx-to'>Merchant</span> &nbsp;— message sent to you:";
+  mc.innerHTML = "<span class='cx-to'>Merchant</span> &nbsp;— decision:";
   stage.appendChild(mc);
 
   const card = el("div", "assure-card os-" + a.outcome);
