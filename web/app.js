@@ -22,7 +22,7 @@ let DEMO_LOCK = false;
 
 const TABS = [
   ["demo", "Live demo"],
-  ["merchant", "Merchant feed"],
+  ["merchant", "Merchant dashboard"],
   ["proof", "How it works & proof"],
 ];
 
