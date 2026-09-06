@@ -64,10 +64,18 @@
       <!-- MERCHANT PANE -->
       <div class="pane merchant-pane">
         <div class="merchant-pane-head">
-          <div class="pane-title">Merchant dashboard · live</div>
+          <div>
+            <div class="pane-title">Merchant workspace</div>
+            <div class="merchant-live"><span class="live-dot"></span> Live decision</div>
+          </div>
           <button class="btn ghost compact-btn" id="merchant-view-btn" type="button">Open dashboard</button>
         </div>
         <h3 id="merchant-head">Recovery & assurance</h3>
+        <div class="merchant-summary" id="merchant-summary" hidden>
+          <div><span>Decision</span><strong id="merchant-status">Pending</strong></div>
+          <div><span>Expected recovery</span><strong id="merchant-recovery">—</strong></div>
+          <div><span>Customer action</span><strong id="merchant-action">—</strong></div>
+        </div>
         <div class="stage" id="merchant-stage">
           <div class="txn-line dim">New failed payments will appear here as the payer pays.</div>
         </div>

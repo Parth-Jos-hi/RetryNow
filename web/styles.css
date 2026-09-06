@@ -270,8 +270,16 @@ footer {
 .pane.merchant-pane { background: #fff3e7; border: 1px solid #e5b19b; }
 .merchant-pane-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .compact-btn { padding: 5px 9px; font-size: 11px; }
+.merchant-live { color: var(--accent-2); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.live-dot { display: inline-block; width: 7px; height: 7px; margin-right: 5px; border-radius: 50%; background: var(--accent-2); vertical-align: 1px; }
 .pane .pane-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 700; }
 .pane h3 { margin: 6px 0 14px; font-size: 17px; }
+.merchant-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 16px; }
+.merchant-summary > div { min-width: 0; padding: 9px 10px; background: rgba(255, 255, 255, 0.65); border: 1px solid var(--line); border-radius: 8px; }
+.merchant-summary span { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+.merchant-summary strong { display: block; margin-top: 3px; overflow: hidden; color: var(--text); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.merchant-summary .status-good { color: var(--accent-2); }
+.merchant-summary .status-stop { color: var(--danger); }
 .scenario-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
 @media (max-width: 700px) { .scenario-list { grid-template-columns: 1fr; } }
 .scenario-chip {

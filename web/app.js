@@ -470,6 +470,7 @@ function selectScenario(key) {
   }
   $("payer-stage").innerHTML =
     `<div class="txn-line dim">${SCENARIOS ? SCENARIOS[key].hook : ""}</div>`;
+  $("merchant-summary").hidden = true;
   $("merchant-stage").innerHTML =
     `<div class="txn-line dim">New failed payments will appear here as the payer pays.</div>`;
 }
@@ -528,6 +529,11 @@ function showAssurance(decision) {
   const stage = $("merchant-stage");
   stage.innerHTML = "";
   $("merchant-head").textContent = "Recovery & assurance · live";
+  $("merchant-summary").hidden = false;
+  $("merchant-status").textContent = a.outcome === "will" ? "Keep order open" : a.outcome === "blocked" ? "Review required" : "Close order";
+  $("merchant-status").className = a.outcome === "will" ? "status-good" : "status-stop";
+  $("merchant-recovery").textContent = fmt.inr2(a.merchant_benefit);
+  $("merchant-action").textContent = a.outcome === "will" ? "None" : a.outcome === "blocked" ? "Manual review" : "Release order";
 
   // TWO-WAY exchange: the customer spots their SMS in the left (payer) pane
   // while the merchant sees the assurance in the right pane — both get a message.
@@ -549,10 +555,6 @@ function showAssurance(decision) {
     quiet.textContent = "No message was sent — we don't contact you unless it's worth it.";
     payer.appendChild(quiet);
   }
-
-  const mc = el("div", "cx-caption");
-  mc.innerHTML = "<span class='cx-to'>Merchant</span> &nbsp;— decision:";
-  stage.appendChild(mc);
 
   const card = el("div", "assure-card os-" + a.outcome);
   const title = el("div", "assure-title");
