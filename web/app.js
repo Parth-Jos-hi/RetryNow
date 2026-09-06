@@ -86,29 +86,6 @@ function render() {
   $("run-badge").textContent =
     `${meta.n_test_transactions} txns · seed ${meta.seed} · ${meta.n_executions} executions`;
 
-  // hero stats
-  $("stat-recovered").textContent = fmt.inr(agent.recovered_value);
-  $("stat-delta").textContent = "+" + fmt.inr(agent.net_recovered_value - comparison.dumb_retry.net_recovered_value);
-  $("stat-rate").textContent = fmt.pct(agent.recovery_rate_value);
-  $("stat-touches").textContent = agent.touchpoints;
-
-  // hero takeaways
-  const take = $("hero-takeaways");
-  take.innerHTML = "";
-  const items = [
-    ["good", `Beats dumb retry by <b>+${fmt.inr(agent.net_recovered_value - comparison.dumb_retry.net_recovered_value)} net</b> on the same 1,336 transactions.`],
-    ["good", `Recovers most of the rule's value with <b>${agent.touchpoints} vs ${comparison.rule_retry.touchpoints} customer touches</b> (${Math.round((1 - agent.touchpoints / comparison.rule_retry.touchpoints) * 100)}% fewer).`],
-    [agent.risk_blocked ? "warn" : "", agent.risk_blocked
-      ? `Risk gate suppressed <b>${agent.risk_blocked} high-risk payments</b> (₹${fmt.inr(agent.risk_suppressed_value)} deliberately not pursued) — compliance before revenue, suppressed ≠ lost.`
-      : `EV selection uses <b>${fmt.pct(agent.give_up_rate)} give-ups</b> — the stopping rule working, not a blanket retry.`],
-    ["warn", `Trails the rule by ${fmt.inr(Math.abs(agent.net_recovered_value - comparison.rule_retry.net_recovered_value))} in one drifted segment — <b>quantified below</b>, fix = flagged retraining.`],
-  ];
-  for (const [cls, html] of items) {
-    const d = el("div", "takeaway" + (cls ? " " + cls : ""));
-    d.innerHTML = html;
-    take.appendChild(d);
-  }
-
   renderComparison(comparison);
   renderActions(actions);
   renderTrail(trail);
@@ -481,6 +458,7 @@ function initDemo() {
       selectScenario(Object.keys(sc)[0]);
     });
   $("pay-btn").onclick = pay;
+    $("merchant-view-btn").onclick = () => switchView("merchant");
 }
 
 function selectScenario(key) {
@@ -575,12 +553,6 @@ function showAssurance(decision) {
   const mc = el("div", "cx-caption");
   mc.innerHTML = "<span class='cx-to'>Merchant</span> &nbsp;— message sent to you:";
   stage.appendChild(mc);
-
-  // the merchant's delivered message/notification (symmetric with the payer's SMS)
-  const mBubble = el("div", "cx-bubble merchant-bubble");
-  mBubble.innerHTML =
-    `<svg class="bell" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M12 3a5.5 5.5 0 0 0-5.5 5.5v4.7L5 16v1h14v-1l-1.5-2.8V8.5A5.5 5.5 0 0 0 12 3zM9.5 19a2.5 2.5 0 0 0 5 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> ${escapeHtml(a.message)}`;
-  stage.appendChild(mBubble);
 
   const card = el("div", "assure-card os-" + a.outcome);
   const title = el("div", "assure-title");

@@ -268,6 +268,8 @@ footer {
 .pane { border-radius: var(--radius); padding: 20px; }
 .pane.payer { background: var(--card); border: 1px solid var(--line); }
 .pane.merchant-pane { background: #fff3e7; border: 1px solid #e5b19b; }
+.merchant-pane-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.compact-btn { padding: 5px 9px; font-size: 11px; }
 .pane .pane-title { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 700; }
 .pane h3 { margin: 6px 0 14px; font-size: 17px; }
 .scenario-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }

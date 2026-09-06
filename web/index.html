@@ -33,31 +33,6 @@
 
 <main>
 
-  <!-- ─────────────────────────── hero ─────────────────────────── -->
-  <section class="hero">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Razorpay AI Internship — Track 3: AI Revenue Recovery</p>
-        <h1>Failed payments aren't lost money.<br>
-          <span class="accent">They're recoverable revenue — if you chase them at the <em>right time, right way</em>.</span>
-        </h1>
-        <p class="lede">
-          When a payment fails, most merchants either spam a retry (annoying the customer) or
-          quietly lose the order. RetryNow picks <strong>exactly one</strong> smart action per failed
-          payment — retry soon, retry after payday, switch instrument, send a link, or honestly
-          give up — recovers the ₹, and stops when it's not worth it.
-        </p>
-        <div class="hero-stats" id="hero-stats">
-          <div class="stat-card"><div class="stat-num" id="stat-recovered">—</div><div class="stat-label">AI recovered value</div></div>
-          <div class="stat-card"><div class="stat-num" id="stat-delta">—</div><div class="stat-label">Net vs dumb retry</div></div>
-          <div class="stat-card"><div class="stat-num" id="stat-rate">—</div><div class="stat-label">Recovery rate (value)</div></div>
-          <div class="stat-card"><div class="stat-num" id="stat-touches">—</div><div class="stat-label">Customer touchpoints</div></div>
-        </div>
-      </div>
-      <div class="hero-takeaways" id="hero-takeaways"></div>
-    </div>
-  </section>
-
   <!-- ═══════════════════ VIEW 1 · LIVE DEMO ═══════════════════ -->
   <section id="view-demo" class="section view">
     <h2>See it work <span class="muted">— the payer pays, the merchant hears the outcome</span></h2>
@@ -88,7 +63,10 @@
 
       <!-- MERCHANT PANE -->
       <div class="pane merchant-pane">
-        <div class="pane-title">Merchant dashboard · live</div>
+        <div class="merchant-pane-head">
+          <div class="pane-title">Merchant dashboard · live</div>
+          <button class="btn ghost compact-btn" id="merchant-view-btn" type="button">Open dashboard</button>
+        </div>
         <h3 id="merchant-head">Recovery & assurance</h3>
         <div class="stage" id="merchant-stage">
           <div class="txn-line dim">New failed payments will appear here as the payer pays.</div>

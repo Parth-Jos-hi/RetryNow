@@ -382,7 +382,7 @@ def _demo_pay(amount: float, scenario_key: str) -> dict:
         "day_of_month": 10,
     }])
     cfg = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
-    from src.models.decision_engine import DecisionEngine
+    from src.models.decision_engine import Decision, DecisionEngine, GIVE_UP
     from src.risk.risk_gate import MockRiskGate
     engine = DecisionEngine(settings=cfg["decision_engine"])
     gate = MockRiskGate(block_threshold=cfg["risk_gate"].get("block_threshold"),
@@ -406,6 +406,22 @@ def _demo_pay(amount: float, scenario_key: str) -> dict:
     d = engine.decide(amount, p_actions, attempts=0,
                       current_method=str(row["payment_method"]),
                       risk_allowed=verdict.allowed)
+    reason_key = sc["reason"].lower()
+    hard_stop = any(term in reason_key for term in (
+        "insufficient_funds", "insufficient_balance", "card_expired",
+        "card_blocked", "account_blocked"))
+    if not d.risk_blocked and d.action != GIVE_UP and (hard_stop or d.probability < 0.30):
+        d = Decision(
+            action=GIVE_UP,
+            probability=0.0,
+            attempts=d.attempts,
+            reason=("customer-side funding or instrument issue requires a new "
+                    "payment method" if hard_stop else
+                    "predicted recovery is below the 30% merchant acceptance bar"),
+            ev=0.0,
+            utilities=d.utilities,
+            risk_blocked=False,
+        )
     decision = {
         "amount": round(amount, 2),
         "action": d.action,
