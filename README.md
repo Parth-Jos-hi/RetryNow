@@ -79,7 +79,7 @@ razorpay/
 │   ├── evaluation/           ← ₹-centric metrics, off-policy eval (IPW), comparison report
 │   └── explainer/            ← LLM explainer + customer recovery message generator
 ├── web/                      ← the real website: server.py (stdlib HTTP + JSON API),
-│                              index.html / styles.css / app.js (dark finance UI)
+│                              index.html / styles.css / app.js (bright merchant workspace UI)
 ├── scripts/run_pipeline.py   ← CLI: generate → train → policies → agent → evaluate
 ├── tests/                    ← unit + integration tests (96 passing)
 └── outputs/                  ← evaluation_report.md + audit/agent_audit.jsonl + generated_data.csv
@@ -106,7 +106,7 @@ python web/server.py                              # the website → http://local
 ## 🌐 The website
 
 The evaluation UI is a **real web app** — a zero-dependency Python HTTP server
-(`web/server.py`, stdlib only) serving a hand-built dark-finance frontend
+(`web/server.py`, stdlib only) serving a hand-built bright merchant-workspace frontend
 (`web/index.html` + `styles.css` + `app.js`) that reads the pipeline's actual
 outputs via a JSON API. No frameworks, no CDN, no external assets — it runs
 fully offline:
@@ -125,14 +125,18 @@ outputs.
 The site is organised as **three tabs**, built so a newcomer can follow it
 without reading a report first:
 
-1. **Live demo** — a two-pane theater. You are the **payer** on the left: pick a
+1. **Live demo** — a two-pane workspace. You are the **payer** on the left: pick a
    real failure (UPI server busy, insufficient funds, an expired card, a big-ticket
    decline, a flagged payment), pick an amount, press **Pay** — the payment fails.
-   On the right the **merchant dashboard** instantly shows the *assurance*: will
-   it recover, roughly when, how confident, what the merchant should do — plus a
-   short timeline of what happens next. Driven by the real trained model + EV
-   engine + risk gate, not canned text.
-2. **Merchant feed** — upload your own failed-transactions CSV (one-click
+      On the right the **merchant workspace** shows a compact decision summary:
+      whether to keep the order open, expected recovery value, whether customer action
+      is needed, and a short timeline. The **Open dashboard** action takes the merchant
+      to the full dashboard view.
+      Low-confidence outcomes are not presented as recoveries: insufficient funds,
+      expired or blocked instruments, and predictions below the 30% acceptance bar are
+      marked as failed and the order is released. Only worthwhile recovery cases receive
+      retry messaging. Driven by the real trained model + EV engine + risk gate.
+2. **Merchant dashboard** — upload your own failed-transactions CSV (one-click
    "**Try the sample file**" loads `samples/merchant_failures.csv`) and see, row by
    row, the single best recovery action, the merchant-facing assurance, and the
    **joint benefit story**: the ₹ the merchant is expected to recover and the
@@ -143,7 +147,7 @@ without reading a report first:
 
 ### 🧪 Try it on your own data
 
-The **Merchant feed** tab is a real upload flow (`POST /api/upload`): upload a
+The **Merchant dashboard** tab is a real upload flow (`POST /api/upload`): upload a
 failed-transactions CSV and the same trained estimator + EV engine + risk gate
 score **every row** and return the single best action per transaction — with
 predicted success rate, ₹ expected value, risk verdict, merchant assurance, and
