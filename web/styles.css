@@ -249,6 +249,19 @@ footer {
 .view { display: none; }
 .view.active { display: block; }
 
+@media (max-width: 700px) {
+  .topbar { align-items: flex-start; flex-wrap: wrap; gap: 10px 14px; padding: 10px 16px; }
+  .brand { min-width: 0; flex: 1 1 100%; align-items: center; }
+  .brand-sub { overflow: hidden; text-overflow: ellipsis; }
+  .tabs { order: 2; margin-left: 0; max-width: 100%; overflow-x: auto; padding-bottom: 2px; }
+  .tab-btn { flex: 0 0 auto; padding: 7px 11px; }
+  .run-badge { order: 3; margin-left: auto; max-width: 45%; overflow: hidden; text-overflow: ellipsis; }
+  .hero, .section { padding-left: 20px; padding-right: 20px; }
+  h1 { font-size: 32px; }
+  .hero { padding-top: 42px; }
+  .section { padding-top: 28px; }
+}
+
 /* ── live demo theater ────────────────────────────────────── */
 .theater { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; }
 @media (max-width: 900px) { .theater { grid-template-columns: 1fr; } }
