@@ -101,7 +101,7 @@ h1 .accent {
 .takeaway {
   background: rgba(255, 255, 255, 0.86); border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
-  border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: #c6cdf2;
+  border-radius: 10px; padding: 12px 14px; font-size: 13.5px; color: #675952;
 }
 .takeaway b { color: var(--text); }
 .takeaway.warn { border-left-color: var(--warn); }
@@ -111,7 +111,7 @@ h1 .accent {
 .section { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
 h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 6px; }
 h2 .muted { color: var(--muted); font-size: 15px; font-weight: 500; }
-h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 12px; color: #c6cdf2; }
+h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 12px; color: #4d403a; }
 .section-note { color: var(--muted); max-width: 80ch; margin-bottom: 18px; font-size: 13.5px; }
 
 .card {
@@ -181,7 +181,7 @@ h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 12px; color: #c6cdf2; }
   padding: 18px; margin-bottom: 16px;
 }
 .action-hero .big { font-size: 22px; font-weight: 800; color: var(--accent-2); }
-.explain-reason { font-size: 13.5px; color: #c6cdf2; margin-top: 10px; padding: 10px 12px;
+.explain-reason { font-size: 13.5px; color: #675952; margin-top: 10px; padding: 10px 12px;
   background: #fffaf2; border: 1px solid var(--line); border-radius: 10px; font-style: italic; }
 .badge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 999px;
   background: #fff1df; border: 1px solid var(--line); color: var(--text); margin: 2px 2px 0 0; }
@@ -264,7 +264,7 @@ footer {
   border-radius: 9px; padding: 9px 11px; cursor: pointer; font-size: 12.5px; line-height: 1.35;
 }
 .scenario-chip:hover { border-color: var(--accent); }
-.scenario-chip.active { border-color: var(--accent); background: #15224a; box-shadow: inset 3px 0 0 var(--accent); }
+.scenario-chip.active { border-color: var(--accent); background: #fff0e4; box-shadow: inset 3px 0 0 var(--accent); }
 .amount-row { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
 .amount-row label { font-size: 12px; color: var(--muted); }
 .amount-row input { background: var(--bg-2); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 14px; width: 140px; }
@@ -272,7 +272,7 @@ footer {
 
 /* remember-card-style */
 .stage { margin-top: 16px; }
-.txn-line { font-family: ui-monospace, monospace; font-size: 12.5px; color: #c6cdf2; }
+.txn-line { font-family: ui-monospace, monospace; font-size: 12.5px; color: #675952; }
 .txn-line .ok { color: var(--good); }
 .txn-line .fail { color: var(--danger); }
 .txn-line .dim { color: var(--muted); }
@@ -284,9 +284,9 @@ footer {
 .assure-card.os-blocked, .assure-card.os-won { border-left-color: var(--danger); }
 .assure-card.os-will { border-left-color: var(--accent-2); }
 .assure-card .assure-title { font-weight: 800; font-size: 14px; margin-bottom: 5px; }
-.assure-card .assure-body { font-size: 13px; color: #c6cdf2; }
+.assure-card .assure-body { font-size: 13px; color: #675952; }
 .benefit-line { display: flex; gap: 8px; margin-top: 10px; font-size: 12px; }
-.benefit-line .chip { background: #0f1b2e; border: 1px solid var(--line); padding: 3px 8px; border-radius: 999px; }
+.benefit-line .chip { background: #fffaf2; border: 1px solid var(--line); padding: 3px 8px; border-radius: 999px; }
 .benefit-line .chip b { color: var(--accent-2); }
 
 /* ── two-way message exchange (live demo) ─────────────────── */
